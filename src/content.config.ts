@@ -31,6 +31,8 @@ const projects = defineCollection({
     featured: z.boolean().default(false),
     /** Display order; lower first. */
     order: z.number().int().default(100),
+    /** Optional architecture-canvas scene key (Excalidraw). */
+    canvas: z.string().optional(),
   }),
 });
 

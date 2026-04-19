@@ -1,6 +1,8 @@
 ---
 import PageLayout from '~/layouts/PageLayout.astro';
 import Chip from '~/components/static/Chip.astro';
+import ArchCanvas from '~/components/island/ArchCanvas.tsx';
+import { archScenes } from '~/data/arch-scenes';
 import { getCollection, render } from 'astro:content';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
 
@@ -11,6 +13,10 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { Content } = await render(project);
+const canvasKey =
+  project.data.canvas && project.data.canvas in archScenes
+    ? (project.data.canvas as keyof typeof archScenes)
+    : null;
 ---
 
 <PageLayout title={project.data.title} description={project.data.summary} eyebrow="Project">
@@ -64,6 +70,18 @@ const { Content } = await render(project);
       </div>
     )}
   </header>
+
+  {canvasKey && (
+    <section class="mb-12">
+      <p class="mb-3 font-mono text-xs font-medium uppercase tracking-[0.2em] text-primary">
+        Architecture
+      </p>
+      <ArchCanvas client:visible scene={canvasKey} />
+      <p class="mt-3 text-xs text-on-surface-variant">
+        Drag to pan · scroll to zoom · read-only
+      </p>
+    </section>
+  )}
 
   <article class="prose prose-invert max-w-3xl prose-headings:font-headline prose-headings:tracking-tight prose-a:text-primary prose-code:text-tertiary">
     <Content />

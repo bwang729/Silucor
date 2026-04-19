@@ -305,6 +305,52 @@ pre {
   }
 }
 
+/* ─── Architecture canvas (Excalidraw, read-only) ────────────
+ * Constrain height; transparent bg so the site gradient shows through.
+ * Skeleton covers the lazy-load gap.
+ * ──────────────────────────────────────────────────────────── */
+.arch-canvas {
+  position: relative;
+  height: 520px;
+  width: 100%;
+  border: 1px solid var(--color-outline-variant);
+  border-radius: 1rem;
+  overflow: hidden;
+  background: color-mix(in oklab, var(--color-surface-low) 30%, transparent);
+}
+
+.arch-canvas-skeleton {
+  background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in oklab, var(--color-primary) 6%, transparent),
+      transparent
+    )
+    color-mix(in oklab, var(--color-surface-low) 30%, transparent);
+  background-size: 200% 100%;
+  animation: arch-shimmer 1.4s linear infinite;
+}
+
+@keyframes arch-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.arch-canvas .excalidraw,
+.arch-canvas .excalidraw .App {
+  background-color: transparent !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arch-canvas-skeleton {
+    animation: none;
+  }
+}
+
 /* ─── Blog reader chrome (progress bar + TOC active state) ──
  * Progress bar fills the --progress CSS var, driven by scroll JS.
  * TOC `.is-active` receives the primary accent border + text.
