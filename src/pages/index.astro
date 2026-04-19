@@ -7,6 +7,7 @@ import Chip from '~/components/static/Chip.astro';
 import FadeIn from '~/components/island/FadeIn.tsx';
 import Spotlight from '~/components/island/Spotlight.tsx';
 import SocialLinks from '~/components/island/SocialLinks.tsx';
+import HeroCanvas from '~/components/island/HeroCanvas.tsx';
 import { profile } from '~/data/profile';
 import { getCollection } from 'astro:content';
 import { ArrowRight, Sparkles } from 'lucide-react';
@@ -27,7 +28,8 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft && data.lan
   <main class="container-page flex-1">
     {/* Hero ─────────────────────────────────── */}
     <section class="spotlight relative pt-20 pb-24 md:pt-28 md:pb-32" data-spotlight>
-      <FadeIn client:load className="max-w-4xl">
+      <HeroCanvas client:visible />
+      <FadeIn client:load className="relative z-10 max-w-4xl">
         <p
           class="mb-6 inline-flex items-center gap-2 rounded-full border border-outline-variant bg-surface-low/60 px-3 py-1.5 text-xs font-medium tracking-wider text-on-surface-variant uppercase backdrop-blur-xl"
         >

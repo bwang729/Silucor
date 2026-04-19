@@ -305,6 +305,30 @@ pre {
   }
 }
 
+/* ─── Hero WebGL canvas (silicon lattice) ────────────────────
+ * Absolute layer behind hero content. Canvas z-index sits above
+ * the spotlight ::before gradient (z: -1) but under FadeIn text (z: 10).
+ * pointer-events:none so CTAs stay clickable.
+ * ──────────────────────────────────────────────────────────── */
+.hero-canvas {
+  position: absolute !important;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  mask-image: radial-gradient(
+    ellipse 85% 80% at 65% 55%,
+    black 30%,
+    transparent 78%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-canvas {
+    display: none;
+  }
+}
+
 /* ─── Tooltip (Radix) ────────────────────────────────────────
  * MD3-styled floating label for icon-only triggers.
  * ──────────────────────────────────────────────────────────── */
