@@ -7,7 +7,7 @@ lang: 'en'
 draft: false
 ---
 
-```sh
+```sh title="terminal"
 $ echo "hello, world"
 hello, world
 ```
@@ -28,5 +28,35 @@ The real first post will land at launch.
 - **MDX + Content Collections** with Zod schemas.
 - **Cloudflare Pages** for delivery.
 
-The aesthetic is unapologetically terminal — monospace fonts, ASCII rules,
-phosphor / amber / paper themes you can swap with `t`.
+## Code samples (expressive-code demo)
+
+Inline `const x = 1` stays teal. Block with file title + highlights:
+
+```ts title="src/lib/greet.ts" {3} ins={5-6} del={4}
+export function greet(name: string): string {
+  const clean = name.trim();
+  const label = clean.length > 0 ? clean : 'friend';
+  return `hi, ${name}`;
+  const prefix = 'hello';
+  return `${prefix}, ${label}`;
+}
+```
+
+Collapsed block with line numbers:
+
+```rust title="bench.rs" showLineNumbers collapse={1-3, 10-12}
+use std::time::Instant;
+
+fn now() -> Instant { Instant::now() }
+
+fn run() {
+    let t = now();
+    for i in 0..1_000_000 {
+        std::hint::black_box(i * 2);
+    }
+    let dt = t.elapsed();
+    println!("{:?}", dt);
+}
+
+fn main() { run() }
+```
