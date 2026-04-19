@@ -1,0 +1,33 @@
+---
+interface Props {
+  /** Small uppercase eyebrow above the heading. */
+  eyebrow?: string;
+  /** Main heading; gradient-tinted. */
+  heading?: string;
+  /** Subtitle paragraph below the heading. */
+  subtitle?: string;
+  align?: 'left' | 'center';
+}
+
+const { eyebrow, heading, subtitle, align = 'left' } = Astro.props;
+const alignClass = align === 'center' ? 'text-center mx-auto' : '';
+---
+
+<header class:list={['mb-12 max-w-3xl', alignClass]}>
+  {eyebrow && (
+    <p
+      class="mb-3 inline-flex items-center gap-2 font-mono text-xs font-medium uppercase tracking-[0.2em] text-primary"
+    >
+      <span class="block size-1.5 rounded-full bg-[color:var(--color-primary)]" aria-hidden="true"></span>
+      {eyebrow}
+    </p>
+  )}
+  {heading && (
+    <h1 class="font-headline text-4xl font-bold tracking-tighter text-on-surface md:text-5xl">
+      {heading}
+    </h1>
+  )}
+  {subtitle && (
+    <p class="mt-4 text-base leading-relaxed text-on-surface-variant md:text-lg">{subtitle}</p>
+  )}
+</header>

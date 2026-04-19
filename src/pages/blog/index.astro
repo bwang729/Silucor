@@ -1,0 +1,63 @@
+---
+import PageLayout from '~/layouts/PageLayout.astro';
+import FadeIn from '~/components/island/FadeIn.tsx';
+import { getCollection } from 'astro:content';
+import { Tag } from 'lucide-react';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
+);
+---
+
+<PageLayout
+  title="Blog"
+  description="Engineering notes, deep dives, retros."
+  eyebrow="Writing"
+  heading="Notes & deep dives"
+  subtitle="Occasional posts about systems engineering, semiconductors, and the rabbit holes I fall into."
+>
+  {
+    posts.length === 0 ? (
+      <p class="text-on-surface-variant">No posts yet.</p>
+    ) : (
+      <ul class="space-y-4">
+        {posts.map((post, i) => (
+          <FadeIn client:visible as="li" delay={i * 50}>
+            <a
+              href={`/blog/${post.id}`}
+              class="surface group block rounded-2xl p-6 transition hover:-translate-y-0.5 hover:border-[color:color-mix(in_oklab,var(--color-primary)_40%,transparent)]"
+            >
+              <div class="flex flex-wrap items-baseline justify-between gap-3">
+                <h2 class="font-headline text-xl font-bold tracking-tight text-on-surface group-hover:text-primary">
+                  {post.data.title}
+                </h2>
+                <time
+                  datetime={post.data.publishedAt.toISOString()}
+                  class="font-mono text-xs tabular-nums text-outline"
+                >
+                  {post.data.publishedAt.toISOString().slice(0, 10)}
+                </time>
+              </div>
+              <p class="mt-2 text-sm leading-relaxed text-on-surface-variant">
+                {post.data.description}
+              </p>
+              <div class="mt-4 flex flex-wrap items-center gap-2 text-xs text-on-surface-variant">
+                <span class="rounded bg-surface px-1.5 py-0.5 font-mono uppercase">
+                  {post.data.lang}
+                </span>
+                {post.data.tags.length > 0 && (
+                  <>
+                    <Tag size={12} className="text-outline" />
+                    {post.data.tags.map((t) => (
+                      <span>#{t}</span>
+                    ))}
+                  </>
+                )}
+              </div>
+            </a>
+          </FadeIn>
+        ))}
+      </ul>
+    )
+  }
+</PageLayout>

@@ -1,0 +1,30 @@
+---
+interface Props {
+  href?: string;
+  /** Visual emphasis: 'default' or 'bright'. */
+  variant?: 'default' | 'bright';
+  class?: string;
+}
+
+const { href, variant = 'default', class: cls = '' } = Astro.props;
+const Tag = href ? 'a' : 'div';
+const surface = variant === 'bright' ? 'surface-bright' : 'surface';
+---
+
+<Tag
+  href={href}
+  class:list={[
+    'group relative block rounded-2xl p-6 transition-all duration-300',
+    surface,
+    href && 'hover:-translate-y-1 hover:shadow-2xl hover:shadow-[color:color-mix(in_oklab,var(--color-primary)_15%,transparent)]',
+    cls,
+  ]}
+>
+  <span
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-[color:color-mix(in_oklab,var(--color-primary)_10%,transparent)] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+  ></span>
+  <div class="relative">
+    <slot />
+  </div>
+</Tag>

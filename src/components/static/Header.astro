@@ -1,0 +1,76 @@
+---
+import { NAV_LINKS, isCurrentPath } from '~/lib/site';
+import { profile } from '~/data/profile';
+
+const here = Astro.url.pathname;
+---
+
+<header
+  class="sticky top-0 z-40 border-b border-outline-variant/40 bg-[color:var(--color-background)]/60 backdrop-blur-xl"
+>
+  <div class="container-page flex h-16 items-center justify-between gap-6">
+    <a href="/" class="group flex items-center gap-2.5">
+      <span
+        class="grid size-9 place-items-center rounded-lg bg-gradient-to-br from-[color:var(--color-primary)] to-[color:var(--color-primary-container)] font-headline text-base font-bold text-[color:var(--color-on-primary)] shadow-lg shadow-[color:color-mix(in_oklab,var(--color-primary)_25%,transparent)] transition-transform group-hover:scale-105"
+        aria-hidden="true"
+      >
+        S
+      </span>
+      <span class="font-headline text-base font-bold tracking-tight text-on-surface">
+        {profile.brand.en}
+      </span>
+    </a>
+
+    <nav aria-label="Primary" class="hidden items-center gap-1 md:flex">
+      {
+        NAV_LINKS.map((l) => {
+          const active = isCurrentPath(here, l.href);
+          return (
+            <a
+              href={l.href}
+              class:list={[
+                'rounded-full px-3 py-1.5 text-sm font-medium transition-colors',
+                active
+                  ? 'bg-[color:color-mix(in_oklab,var(--color-primary)_15%,transparent)] text-primary'
+                  : 'text-on-surface-variant hover:text-on-surface',
+              ]}
+              aria-current={active ? 'page' : undefined}
+            >
+              {l.label}
+            </a>
+          );
+        })
+      }
+    </nav>
+
+    <a
+      href="/about"
+      class="hidden items-center gap-1.5 rounded-full bg-gradient-to-br from-[color:var(--color-primary)] to-[color:var(--color-primary-container)] px-4 py-1.5 text-sm font-semibold text-[color:var(--color-on-primary)] shadow-md transition hover:brightness-110 sm:inline-flex"
+    >
+      Get in touch
+    </a>
+  </div>
+
+  <nav
+    aria-label="Primary mobile"
+    class="container-page flex flex-wrap gap-x-3 gap-y-1 border-t border-outline-variant/40 py-2 text-sm md:hidden"
+  >
+    {
+      NAV_LINKS.map((l) => {
+        const active = isCurrentPath(here, l.href);
+        return (
+          <a
+            href={l.href}
+            class:list={[
+              'rounded-full px-2.5 py-1',
+              active ? 'text-primary' : 'text-on-surface-variant hover:text-on-surface',
+            ]}
+            aria-current={active ? 'page' : undefined}
+          >
+            {l.label}
+          </a>
+        );
+      })
+    }
+  </nav>
+</header>

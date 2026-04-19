@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1326"/>
+      <stop offset="100%" stop-color="#171f33"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#98cbff"/>
+      <stop offset="50%" stop-color="#00a3ff"/>
+      <stop offset="100%" stop-color="#3cddc7"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.2" cy="0.2" r="0.5">
+      <stop offset="0%" stop-color="#00a3ff" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#00a3ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <g font-family="'Space Grotesk', 'Inter', sans-serif">
+    <text x="80" y="180" font-size="22" font-weight="600" letter-spacing="3" fill="#98cbff">SILUCOR</text>
+    <text x="80" y="340" font-size="120" font-weight="800" letter-spacing="-5" fill="url(#accent)">Silicon · Systems</text>
+    <text x="80" y="450" font-size="120" font-weight="800" letter-spacing="-5" fill="#dae2fd">· Software</text>
+    <text x="80" y="540" font-size="26" font-weight="500" fill="#bec7d4">silucor.dev</text>
+  </g>
+</svg>

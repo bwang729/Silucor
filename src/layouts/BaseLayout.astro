@@ -1,0 +1,71 @@
+---
+import '~/styles/globals.css';
+import { profile } from '~/data/profile';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Override page-specific OG image path. */
+  ogImage?: string;
+}
+
+const { title, description, ogImage } = Astro.props;
+
+const fullTitle = title
+  ? `${title} · ${profile.brand.en}`
+  : `${profile.brand.en} · ${profile.brand.tagline.en}`;
+const desc = description ?? profile.identity.bio.en;
+const og = ogImage ?? '/og-default.svg';
+const canonical = new URL(Astro.url.pathname, Astro.site ?? profile.meta.origin).toString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={desc} />
+    <meta name="author" content={profile.meta.author} />
+    <meta name="theme-color" content="#0b1326" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={og} />
+    <meta property="og:site_name" content={profile.brand.en} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={desc} />
+    <meta name="twitter:image" content={og} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+
+    <slot name="head" />
+  </head>
+  <body class="relative flex min-h-dvh flex-col overflow-x-hidden">
+    <div
+      aria-hidden="true"
+      class="glow-blob"
+      style="top:-12rem;left:-8rem;width:32rem;height:32rem;background:#00a3ff"
+    >
+    </div>
+    <div
+      aria-hidden="true"
+      class="glow-blob"
+      style="bottom:-10rem;right:-8rem;width:28rem;height:28rem;background:#3cddc7"
+    >
+    </div>
+    <slot />
+  </body>
+</html>

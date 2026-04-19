@@ -1,0 +1,53 @@
+---
+import PageLayout from '~/layouts/PageLayout.astro';
+import { getCollection, render } from 'astro:content';
+import { ArrowLeft, Calendar, Tag as TagIcon } from 'lucide-react';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((p) => ({ params: { slug: p.id }, props: { post: p } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const date = post.data.publishedAt.toISOString().slice(0, 10);
+---
+
+<PageLayout title={post.data.title} description={post.data.description} eyebrow="Post">
+  <a href="/blog" class="mb-6 inline-flex items-center gap-1.5 text-sm text-on-surface-variant hover:text-on-surface">
+    <ArrowLeft size={14} /> All posts
+  </a>
+
+  <header class="mb-12 max-w-3xl">
+    <h1 class="font-headline text-4xl font-bold tracking-tighter md:text-5xl">
+      {post.data.title}
+    </h1>
+    <p class="mt-4 text-lg leading-relaxed text-on-surface-variant">
+      {post.data.description}
+    </p>
+
+    <div class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-on-surface-variant">
+      <span class="inline-flex items-center gap-1.5">
+        <Calendar size={14} />
+        <time datetime={post.data.publishedAt.toISOString()} class="font-mono tabular-nums">
+          {date}
+        </time>
+      </span>
+      <span class="rounded bg-surface px-1.5 py-0.5 font-mono text-xs uppercase">
+        {post.data.lang}
+      </span>
+      {post.data.tags.length > 0 && (
+        <span class="inline-flex items-center gap-1.5">
+          <TagIcon size={14} />
+          {post.data.tags.map((t) => (
+            <span class="text-tertiary">#{t}</span>
+          ))}
+        </span>
+      )}
+    </div>
+  </header>
+
+  <article class="prose prose-invert max-w-3xl prose-headings:font-headline prose-headings:tracking-tight prose-a:text-primary prose-code:text-tertiary prose-pre:bg-[color:var(--color-surface-container-low)]">
+    <Content />
+  </article>
+</PageLayout>

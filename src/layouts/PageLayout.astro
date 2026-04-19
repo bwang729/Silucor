@@ -1,0 +1,32 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Header from '~/components/static/Header.astro';
+import Footer from '~/components/static/Footer.astro';
+import SectionHeader from '~/components/static/SectionHeader.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Top eyebrow label, e.g., "ABOUT". Omit to hide. */
+  eyebrow?: string;
+  /** Page heading. */
+  heading?: string;
+  /** Subtitle below heading. */
+  subtitle?: string;
+  /** Override the default OG image path. */
+  ogImage?: string;
+}
+
+const { title, description, eyebrow, heading, subtitle, ogImage } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} ogImage={ogImage}>
+  <Header />
+  <main class="container-page flex-1 py-16 md:py-24">
+    {(eyebrow || heading || subtitle) && (
+      <SectionHeader eyebrow={eyebrow} heading={heading} subtitle={subtitle} />
+    )}
+    <slot />
+  </main>
+  <Footer />
+</BaseLayout>

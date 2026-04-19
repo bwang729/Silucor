@@ -1,0 +1,71 @@
+---
+import PageLayout from '~/layouts/PageLayout.astro';
+import Chip from '~/components/static/Chip.astro';
+import { getCollection, render } from 'astro:content';
+import { ArrowLeft, ExternalLink } from 'lucide-react';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((p) => ({ params: { slug: p.id }, props: { project: p } }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<PageLayout title={project.data.title} description={project.data.summary} eyebrow="Project">
+  <a href="/projects" class="mb-6 inline-flex items-center gap-1.5 text-sm text-on-surface-variant hover:text-on-surface">
+    <ArrowLeft size={14} /> All projects
+  </a>
+
+  <header class="mb-10 max-w-3xl">
+    <h1 class="font-headline text-4xl font-bold tracking-tighter md:text-5xl">
+      {project.data.title}
+    </h1>
+    <p class="mt-4 text-lg leading-relaxed text-on-surface-variant">
+      {project.data.summary}
+    </p>
+
+    <dl class="mt-8 grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-3">
+      {project.data.role && (
+        <div>
+          <dt class="text-xs font-medium uppercase tracking-wider text-on-surface-variant">Role</dt>
+          <dd class="mt-1 text-sm font-semibold text-on-surface">{project.data.role}</dd>
+        </div>
+      )}
+      {project.data.period && (
+        <div>
+          <dt class="text-xs font-medium uppercase tracking-wider text-on-surface-variant">Period</dt>
+          <dd class="mt-1 font-mono text-sm tabular-nums text-on-surface">{project.data.period}</dd>
+        </div>
+      )}
+      {project.data.link && project.data.link !== '#' && (
+        <div>
+          <dt class="text-xs font-medium uppercase tracking-wider text-on-surface-variant">Link</dt>
+          <dd class="mt-1">
+            <a
+              href={project.data.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
+            >
+              Visit <ExternalLink size={12} />
+            </a>
+          </dd>
+        </div>
+      )}
+    </dl>
+
+    {project.data.stack.length > 0 && (
+      <div class="mt-6 flex flex-wrap gap-1.5">
+        {project.data.stack.map((s) => (
+          <Chip>{s}</Chip>
+        ))}
+      </div>
+    )}
+  </header>
+
+  <article class="prose prose-invert max-w-3xl prose-headings:font-headline prose-headings:tracking-tight prose-a:text-primary prose-code:text-tertiary">
+    <Content />
+  </article>
+</PageLayout>

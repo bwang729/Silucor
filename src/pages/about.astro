@@ -1,0 +1,99 @@
+---
+import PageLayout from '~/layouts/PageLayout.astro';
+import Card from '~/components/static/Card.astro';
+import Chip from '~/components/static/Chip.astro';
+import FadeIn from '~/components/island/FadeIn.tsx';
+import { profile } from '~/data/profile';
+import { Cpu, Shield, Code2, Layers } from 'lucide-react';
+
+const skillGroups = [
+  {
+    icon: Cpu,
+    title: 'Systems & embedded',
+    items: ['Linux kernel', 'Driver development', 'RTOS', 'RISC-V', 'ARM Cortex-M'],
+  },
+  {
+    icon: Code2,
+    title: 'Languages',
+    items: ['C / C++', 'Rust', 'TypeScript', 'Python'],
+  },
+  {
+    icon: Shield,
+    title: 'Security & cryptography',
+    items: ['MPC protocols', 'Threshold signatures', 'Secure storage'],
+  },
+  {
+    icon: Layers,
+    title: 'Tooling',
+    items: ['CMake', 'Cargo / UniFFI', 'Gradle / KMP', 'GDB / OpenOCD'],
+  },
+];
+---
+
+<PageLayout
+  title="About"
+  description={profile.identity.bio.en}
+  eyebrow="About"
+  heading="Building close to the metal"
+  subtitle={profile.identity.bio.en}
+>
+  <FadeIn client:load className="mb-12">
+    <Card variant="bright">
+      <dl class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <dt class="text-xs font-medium uppercase tracking-wider text-on-surface-variant">Role</dt>
+          <dd class="mt-1 font-headline text-base font-semibold text-on-surface">
+            {profile.identity.role.en}
+          </dd>
+        </div>
+        <div>
+          <dt class="text-xs font-medium uppercase tracking-wider text-on-surface-variant">Brand</dt>
+          <dd class="mt-1 font-headline text-base font-semibold text-on-surface">
+            {profile.brand.en} <span class="text-on-surface-variant">/ {profile.brand.zh}</span>
+          </dd>
+        </div>
+        <div>
+          <dt class="text-xs font-medium uppercase tracking-wider text-on-surface-variant">Focus</dt>
+          <dd class="mt-1 font-headline text-base font-semibold text-on-surface">
+            {profile.brand.tagline.en}
+          </dd>
+        </div>
+        <div>
+          <dt class="text-xs font-medium uppercase tracking-wider text-on-surface-variant">Contact</dt>
+          <dd class="mt-1 font-mono text-sm text-on-surface">
+            {profile.contact.emailDisplay}
+          </dd>
+        </div>
+      </dl>
+    </Card>
+  </FadeIn>
+
+  <section class="mb-16">
+    <FadeIn client:visible className="mb-8">
+      <h2 class="font-headline text-3xl font-bold tracking-tighter">Technical arsenal</h2>
+      <p class="mt-2 text-on-surface-variant">
+        Areas where I've shipped real production work.
+      </p>
+    </FadeIn>
+
+    <div class="grid gap-5 md:grid-cols-2">
+      {skillGroups.map((g, i) => (
+        <FadeIn client:visible delay={i * 80}>
+          <Card>
+            <div class="mb-4 flex items-center gap-3">
+              <span class="grid size-9 place-items-center rounded-lg bg-[color:color-mix(in_oklab,var(--color-primary)_15%,transparent)] text-primary">
+                <g.icon size={18} />
+              </span>
+              <h3 class="font-headline text-lg font-semibold text-on-surface">{g.title}</h3>
+            </div>
+            <div class="flex flex-wrap gap-1.5">
+              {g.items.map((s) => (
+                <Chip>{s}</Chip>
+              ))}
+            </div>
+          </Card>
+        </FadeIn>
+      ))}
+    </div>
+  </section>
+</PageLayout>

@@ -1,0 +1,185 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Header from '~/components/static/Header.astro';
+import Footer from '~/components/static/Footer.astro';
+import Card from '~/components/static/Card.astro';
+import Chip from '~/components/static/Chip.astro';
+import FadeIn from '~/components/island/FadeIn.tsx';
+import { profile } from '~/data/profile';
+import { getCollection } from 'astro:content';
+import { ArrowRight, Github, Linkedin, Mail, Sparkles } from 'lucide-react';
+
+const projects = (await getCollection('projects', ({ data }) => data.featured))
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft && data.lang === 'en'))
+  .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf())
+  .slice(0, 5);
+---
+
+<BaseLayout title="Home" description={profile.identity.bio.en}>
+  <Header />
+
+  <main class="container-page flex-1">
+    {/* Hero ─────────────────────────────────── */}
+    <section class="relative pt-20 pb-24 md:pt-28 md:pb-32">
+      <FadeIn client:load className="max-w-4xl">
+        <p
+          class="mb-6 inline-flex items-center gap-2 rounded-full border border-outline-variant bg-surface-low/60 px-3 py-1.5 text-xs font-medium tracking-wider text-on-surface-variant uppercase backdrop-blur-xl"
+        >
+          <Sparkles size={14} className="text-tertiary" />
+          {profile.identity.role.en}
+        </p>
+
+        <h1
+          class="font-headline text-5xl font-black tracking-tighter md:text-7xl lg:text-8xl"
+        >
+          <span class="text-on-surface">Hi, I'm</span>{' '}
+          <span class="gradient-text">{profile.identity.name}</span>.
+        </h1>
+
+        <p
+          class="mt-8 max-w-2xl text-lg leading-relaxed text-on-surface-variant md:text-xl"
+        >
+          {profile.identity.bio.en}
+        </p>
+
+        <div class="mt-10 flex flex-wrap items-center gap-3">
+          <a
+            href="/projects"
+            class="inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-[color:var(--color-primary)] to-[color:var(--color-primary-container)] px-5 py-2.5 text-sm font-semibold text-[color:var(--color-on-primary)] shadow-lg shadow-[color:color-mix(in_oklab,var(--color-primary)_20%,transparent)] transition hover:scale-[1.02] hover:brightness-110"
+          >
+            Explore work
+            <ArrowRight size={16} />
+          </a>
+          <a
+            href="/about"
+            class="inline-flex items-center gap-2 rounded-full border border-outline-variant px-5 py-2.5 text-sm font-semibold text-on-surface transition hover:bg-surface-high/40"
+          >
+            About me
+          </a>
+        </div>
+
+        <div class="mt-10 flex flex-wrap items-center gap-5 text-on-surface-variant">
+          {profile.social.github && (
+            <a href={profile.social.github} aria-label="GitHub" class="hover:text-on-surface" target="_blank" rel="noopener noreferrer">
+              <Github size={20} />
+            </a>
+          )}
+          {profile.social.linkedin && profile.social.linkedin !== '#' && (
+            <a href={profile.social.linkedin} aria-label="LinkedIn" class="hover:text-on-surface" target="_blank" rel="noopener noreferrer">
+              <Linkedin size={20} />
+            </a>
+          )}
+          {profile.contact.email && (
+            <a href={`mailto:${profile.contact.email}`} aria-label="Email" class="hover:text-on-surface">
+              <Mail size={20} />
+            </a>
+          )}
+          <span class="text-xs text-outline">·</span>
+          <span class="font-mono text-xs text-outline">
+            {profile.brand.tagline.en}
+          </span>
+        </div>
+      </FadeIn>
+    </section>
+
+    {/* Featured projects ─────────────────────── */}
+    <section class="py-16">
+      <FadeIn client:visible className="mb-10 flex items-end justify-between gap-4">
+        <div>
+          <p class="mb-2 font-mono text-xs font-medium uppercase tracking-[0.2em] text-primary">
+            Selected work
+          </p>
+          <h2 class="font-headline text-3xl font-bold tracking-tighter md:text-4xl">
+            Featured projects
+          </h2>
+        </div>
+        <a
+          href="/projects"
+          class="hidden items-center gap-1 text-sm font-medium text-primary hover:underline sm:inline-flex"
+        >
+          All projects <ArrowRight size={14} />
+        </a>
+      </FadeIn>
+
+      {
+        projects.length === 0 ? (
+          <p class="text-on-surface-variant">No featured projects yet.</p>
+        ) : (
+          <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {projects.map((p, i) => (
+              <FadeIn client:visible delay={i * 80}>
+                <Card href={`/projects/${p.id}`} class="h-full">
+                  <h3 class="font-headline text-xl font-bold tracking-tight text-on-surface">
+                    {p.data.title}
+                  </h3>
+                  {p.data.role && (
+                    <p class="mt-1 text-xs uppercase tracking-wider text-tertiary">
+                      {p.data.role}
+                    </p>
+                  )}
+                  <p class="mt-3 text-sm leading-relaxed text-on-surface-variant">
+                    {p.data.summary}
+                  </p>
+                  <div class="mt-5 flex flex-wrap gap-1.5">
+                    {p.data.stack.slice(0, 5).map((s) => (
+                      <Chip>{s}</Chip>
+                    ))}
+                  </div>
+                </Card>
+              </FadeIn>
+            ))}
+          </div>
+        )
+      }
+    </section>
+
+    {/* Latest writing ────────────────────────── */}
+    <section class="py-16">
+      <FadeIn client:visible className="mb-10">
+        <p class="mb-2 font-mono text-xs font-medium uppercase tracking-[0.2em] text-primary">
+          From the blog
+        </p>
+        <h2 class="font-headline text-3xl font-bold tracking-tighter md:text-4xl">
+          Latest writing
+        </h2>
+      </FadeIn>
+
+      {
+        posts.length === 0 ? (
+          <p class="text-on-surface-variant">No posts yet.</p>
+        ) : (
+          <ul class="divide-y divide-[color:var(--color-outline-variant)] overflow-hidden rounded-2xl border border-outline-variant bg-surface-low/40 backdrop-blur-xl">
+            {posts.map((post, i) => (
+              <FadeIn client:visible as="li" delay={i * 60}>
+                <a
+                  href={`/blog/${post.id}`}
+                  class="group flex items-center justify-between gap-6 p-5 transition hover:bg-surface-high/40"
+                >
+                  <div class="min-w-0">
+                    <h3 class="truncate font-headline text-lg font-semibold text-on-surface group-hover:text-primary">
+                      {post.data.title}
+                    </h3>
+                    <p class="mt-1 truncate text-sm text-on-surface-variant">
+                      {post.data.description}
+                    </p>
+                  </div>
+                  <time
+                    datetime={post.data.publishedAt.toISOString()}
+                    class="shrink-0 font-mono text-xs tabular-nums text-outline"
+                  >
+                    {post.data.publishedAt.toISOString().slice(0, 10)}
+                  </time>
+                </a>
+              </FadeIn>
+            ))}
+          </ul>
+        )
+      }
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

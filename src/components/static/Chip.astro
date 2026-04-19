@@ -1,0 +1,11 @@
+---
+interface Props {
+  variant?: 'primary' | 'tertiary';
+}
+
+const { variant = 'primary' } = Astro.props;
+---
+
+<span class:list={[variant === 'tertiary' ? 'chip-tertiary' : 'chip']}>
+  <slot />
+</span>

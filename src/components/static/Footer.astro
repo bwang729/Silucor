@@ -1,0 +1,46 @@
+---
+import { profile } from '~/data/profile';
+import { Github, Linkedin, Mail, Rss } from 'lucide-react';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-24 border-t border-outline-variant/40">
+  <div class="container-page flex flex-col gap-6 py-10 sm:flex-row sm:items-center sm:justify-between">
+    <div class="flex items-center gap-3">
+      <span
+        class="grid size-8 place-items-center rounded-md bg-gradient-to-br from-[color:var(--color-primary)] to-[color:var(--color-primary-container)] text-sm font-bold text-[color:var(--color-on-primary)]"
+        aria-hidden="true"
+      >
+        S
+      </span>
+      <p class="text-sm text-on-surface-variant">
+        © {year} {profile.meta.author}. Crafted with care.
+      </p>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-4 text-on-surface-variant">
+      {profile.social.github && (
+        <a href={profile.social.github} aria-label="GitHub" class="hover:text-on-surface" target="_blank" rel="noopener noreferrer">
+          <Github size={18} />
+        </a>
+      )}
+      {profile.social.linkedin && profile.social.linkedin !== '#' && (
+        <a href={profile.social.linkedin} aria-label="LinkedIn" class="hover:text-on-surface" target="_blank" rel="noopener noreferrer">
+          <Linkedin size={18} />
+        </a>
+      )}
+      {profile.contact.email && (
+        <a href={`mailto:${profile.contact.email}`} aria-label="Email" class="hover:text-on-surface">
+          <Mail size={18} />
+        </a>
+      )}
+      <a href={profile.social.rss ?? '/rss.xml'} aria-label="RSS" class="hover:text-on-surface">
+        <Rss size={18} />
+      </a>
+      <span class="mx-2 h-4 w-px bg-[color:var(--color-outline-variant)]" aria-hidden="true"></span>
+      <a href="/sitemap-index.xml" class="text-xs hover:text-on-surface">Sitemap</a>
+      <a href="/llms.txt" class="text-xs hover:text-on-surface">llms.txt</a>
+    </div>
+  </div>
+</footer>
