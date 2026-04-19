@@ -1,5 +1,6 @@
 ---
 import '~/styles/globals.css';
+import { ClientRouter } from 'astro:transitions';
 import { profile } from '~/data/profile';
 
 interface Props {
@@ -51,6 +52,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? profile.meta.origin)
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap"
     />
 
+    <ClientRouter />
     <slot name="head" />
   </head>
   <body class="relative flex min-h-dvh flex-col overflow-x-hidden">

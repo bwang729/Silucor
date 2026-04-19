@@ -5,7 +5,11 @@ import { Github, Linkedin, Mail, Rss } from 'lucide-react';
 const year = new Date().getFullYear();
 ---
 
-<footer class="mt-24 border-t border-outline-variant/40">
+<footer
+  transition:name="site-footer"
+  transition:animate="none"
+  class="mt-24 border-t border-outline-variant/40"
+>
   <div class="container-page flex flex-col gap-6 py-10 sm:flex-row sm:items-center sm:justify-between">
     <div class="flex items-center gap-3">
       <span

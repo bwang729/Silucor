@@ -6,6 +6,8 @@ const here = Astro.url.pathname;
 ---
 
 <header
+  transition:name="site-header"
+  transition:animate="none"
   class="sticky top-0 z-40 border-b border-outline-variant/40 bg-[color:var(--color-background)]/60 backdrop-blur-xl"
 >
   <div class="container-page flex h-16 items-center justify-between gap-6">

@@ -249,6 +249,24 @@ pre {
   50% { opacity: 1; }
 }
 
+/* ─── View Transitions (Astro 5 <ClientRouter />) ──────────
+ * Tune the default root crossfade to a snappier, more premium feel.
+ * Header / footer carry transition:animate="none" so they stay stable.
+ * ──────────────────────────────────────────────────────────── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 260ms;
+  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
 /* Respect reduced motion. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
