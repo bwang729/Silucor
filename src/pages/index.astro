@@ -5,6 +5,7 @@ import Footer from '~/components/static/Footer.astro';
 import Card from '~/components/static/Card.astro';
 import Chip from '~/components/static/Chip.astro';
 import FadeIn from '~/components/island/FadeIn.tsx';
+import Spotlight from '~/components/island/Spotlight.tsx';
 import { profile } from '~/data/profile';
 import { getCollection } from 'astro:content';
 import { ArrowRight, Github, Linkedin, Mail, Sparkles } from 'lucide-react';
@@ -19,11 +20,12 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft && data.lan
 ---
 
 <BaseLayout title="Home" description={profile.identity.bio.en}>
+  <Spotlight client:idle />
   <Header />
 
   <main class="container-page flex-1">
     {/* Hero ─────────────────────────────────── */}
-    <section class="relative pt-20 pb-24 md:pt-28 md:pb-32">
+    <section class="spotlight relative pt-20 pb-24 md:pt-28 md:pb-32" data-spotlight>
       <FadeIn client:load className="max-w-4xl">
         <p
           class="mb-6 inline-flex items-center gap-2 rounded-full border border-outline-variant bg-surface-low/60 px-3 py-1.5 text-xs font-medium tracking-wider text-on-surface-variant uppercase backdrop-blur-xl"
@@ -36,7 +38,17 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft && data.lan
           class="font-headline text-5xl font-black tracking-tighter md:text-7xl lg:text-8xl"
         >
           <span class="text-on-surface">Hi, I'm</span>{' '}
-          <span class="gradient-text">{profile.identity.name}</span>.
+          <span class="gradient-text" aria-label={profile.identity.name}>
+            {profile.identity.name.split('').map((ch, i) => (
+              <span
+                class="hero-char"
+                aria-hidden="true"
+                style={`animation-delay:${400 + i * 35}ms`}
+              >
+                {ch === ' ' ? '\u00a0' : ch}
+              </span>
+            ))}
+          </span>.
         </h1>
 
         <p

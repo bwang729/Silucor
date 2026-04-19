@@ -249,6 +249,62 @@ pre {
   50% { opacity: 1; }
 }
 
+/* ─── Hero entrance: per-character reveal ────────────────────
+ * Applied to the name letters inside the gradient-text span. Each char
+ * starts invisible + pushed down, then fades up. Stagger delay is set
+ * inline per-letter. Runs after the outer FadeIn settles (see delay base
+ * of 400ms in index.astro).
+ * ──────────────────────────────────────────────────────────── */
+.hero-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.35em);
+  animation: hero-char-in 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes hero-char-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-char {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0ms !important;
+  }
+}
+
+/* ─── Mouse-tracked spotlight (pairs with Spotlight island) ─── */
+.spotlight {
+  --spot-x: 50%;
+  --spot-y: 30%;
+  position: relative;
+  isolation: isolate;
+}
+
+.spotlight::before {
+  content: '';
+  position: absolute;
+  inset: -5%;
+  pointer-events: none;
+  background: radial-gradient(
+    520px circle at var(--spot-x) var(--spot-y),
+    color-mix(in oklab, var(--color-primary) 16%, transparent),
+    transparent 55%
+  );
+  mix-blend-mode: screen;
+  transition: background 80ms linear;
+  z-index: -1;
+}
+
+@media (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .spotlight::before {
+    display: none;
+  }
+}
+
 /* ─── Magnetic cursor (dot + ring) ───────────────────────────
  * Dot uses difference blending to stay visible on any background.
  * Ring lerps after the mouse and grows over interactive targets.
