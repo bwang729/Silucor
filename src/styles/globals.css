@@ -249,6 +249,63 @@ pre {
   50% { opacity: 1; }
 }
 
+/* ─── Magnetic cursor (dot + ring) ───────────────────────────
+ * Dot uses difference blending to stay visible on any background.
+ * Ring lerps after the mouse and grows over interactive targets.
+ * Hidden entirely on touch devices and reduced-motion users.
+ * ──────────────────────────────────────────────────────────── */
+.magnetic-dot,
+.magnetic-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 80;
+  opacity: 0;
+  will-change: transform;
+}
+
+.magnetic-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: #ffffff;
+  mix-blend-mode: difference;
+  transition: opacity 0.2s ease;
+}
+
+.magnetic-ring {
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  border: 1.5px solid color-mix(in oklab, var(--color-primary) 55%, transparent);
+  transition:
+    width 0.18s cubic-bezier(0.2, 0.7, 0.2, 1),
+    height 0.18s cubic-bezier(0.2, 0.7, 0.2, 1),
+    border-color 0.18s,
+    background 0.18s,
+    opacity 0.2s ease;
+}
+
+.magnetic-dot.is-visible,
+.magnetic-ring.is-visible {
+  opacity: 1;
+}
+
+.magnetic-ring.is-active {
+  width: 56px;
+  height: 56px;
+  border-color: color-mix(in oklab, var(--color-primary) 85%, transparent);
+  background: color-mix(in oklab, var(--color-primary) 10%, transparent);
+}
+
+@media (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .magnetic-dot,
+  .magnetic-ring {
+    display: none;
+  }
+}
+
 /* ─── Command palette (cmdk + Radix Dialog) ──────────────── */
 .cmdk-overlay {
   position: fixed;

@@ -2,6 +2,7 @@
 import '~/styles/globals.css';
 import { ClientRouter } from 'astro:transitions';
 import CommandPalette from '~/components/island/CommandPalette.tsx';
+import MagneticCursor from '~/components/island/MagneticCursor.tsx';
 import { profile } from '~/data/profile';
 
 interface Props {
@@ -71,5 +72,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? profile.meta.origin)
     </div>
     <slot />
     <CommandPalette client:load transition:persist />
+    <MagneticCursor client:load transition:persist />
   </body>
 </html>
