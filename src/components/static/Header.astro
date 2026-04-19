@@ -1,4 +1,5 @@
 ---
+import { Search } from 'lucide-react';
 import { NAV_LINKS, isCurrentPath } from '~/lib/site';
 import { profile } from '~/data/profile';
 
@@ -45,12 +46,26 @@ const here = Astro.url.pathname;
       }
     </nav>
 
-    <a
-      href="/about"
-      class="hidden items-center gap-1.5 rounded-full bg-gradient-to-br from-[color:var(--color-primary)] to-[color:var(--color-primary-container)] px-4 py-1.5 text-sm font-semibold text-[color:var(--color-on-primary)] shadow-md transition hover:brightness-110 sm:inline-flex"
-    >
-      Get in touch
-    </a>
+    <div class="hidden items-center gap-2 sm:flex">
+      <button
+        type="button"
+        data-cmdk-trigger
+        aria-label="Open command palette"
+        class="inline-flex items-center gap-2 rounded-full border border-outline-variant px-3 py-1.5 text-xs text-on-surface-variant transition hover:border-[color:color-mix(in_oklab,var(--color-primary)_40%,transparent)] hover:text-on-surface"
+      >
+        <Search size={12} />
+        <span class="hidden md:inline">Search</span>
+        <kbd class="rounded border border-outline-variant bg-surface px-1 py-0.5 font-mono text-[10px] leading-none">
+          ⌘K
+        </kbd>
+      </button>
+      <a
+        href="/about"
+        class="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-[color:var(--color-primary)] to-[color:var(--color-primary-container)] px-4 py-1.5 text-sm font-semibold text-[color:var(--color-on-primary)] shadow-md transition hover:brightness-110"
+      >
+        Get in touch
+      </a>
+    </div>
   </div>
 
   <nav
