@@ -305,6 +305,47 @@ pre {
   }
 }
 
+/* ─── Tooltip (Radix) ────────────────────────────────────────
+ * MD3-styled floating label for icon-only triggers.
+ * ──────────────────────────────────────────────────────────── */
+.tooltip-content {
+  z-index: 70;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--color-on-surface);
+  background: color-mix(in oklab, var(--color-surface-high) 92%, transparent);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: 0.5rem;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 10px 24px -8px color-mix(in oklab, black 40%, transparent);
+  user-select: none;
+  animation: tooltip-in 140ms cubic-bezier(0.2, 0, 0, 1);
+  transform-origin: var(--radix-tooltip-content-transform-origin);
+}
+
+.tooltip-arrow {
+  fill: color-mix(in oklab, var(--color-surface-high) 92%, transparent);
+}
+
+@keyframes tooltip-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tooltip-content {
+    animation: none;
+  }
+}
+
 /* ─── Magnetic cursor (dot + ring) ───────────────────────────
  * Dot uses difference blending to stay visible on any background.
  * Ring lerps after the mouse and grows over interactive targets.

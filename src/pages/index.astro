@@ -6,9 +6,10 @@ import Card from '~/components/static/Card.astro';
 import Chip from '~/components/static/Chip.astro';
 import FadeIn from '~/components/island/FadeIn.tsx';
 import Spotlight from '~/components/island/Spotlight.tsx';
+import SocialLinks from '~/components/island/SocialLinks.tsx';
 import { profile } from '~/data/profile';
 import { getCollection } from 'astro:content';
-import { ArrowRight, Github, Linkedin, Mail, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
 const projects = (await getCollection('projects', ({ data }) => data.featured))
   .sort((a, b) => a.data.order - b.data.order)
@@ -74,21 +75,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft && data.lan
         </div>
 
         <div class="mt-10 flex flex-wrap items-center gap-5 text-on-surface-variant">
-          {profile.social.github && (
-            <a href={profile.social.github} aria-label="GitHub" class="hover:text-on-surface" target="_blank" rel="noopener noreferrer">
-              <Github size={20} />
-            </a>
-          )}
-          {profile.social.linkedin && profile.social.linkedin !== '#' && (
-            <a href={profile.social.linkedin} aria-label="LinkedIn" class="hover:text-on-surface" target="_blank" rel="noopener noreferrer">
-              <Linkedin size={20} />
-            </a>
-          )}
-          {profile.contact.email && (
-            <a href={`mailto:${profile.contact.email}`} aria-label="Email" class="hover:text-on-surface">
-              <Mail size={20} />
-            </a>
-          )}
+          <SocialLinks client:idle />
           <span class="text-xs text-outline">·</span>
           <span class="font-mono text-xs text-outline">
             {profile.brand.tagline.en}
