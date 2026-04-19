@@ -11,9 +11,10 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 const date = post.data.publishedAt.toISOString().slice(0, 10);
+const ogImage = `/og/${post.id}.png`;
 ---
 
-<PageLayout title={post.data.title} description={post.data.description} eyebrow="Post">
+<PageLayout title={post.data.title} description={post.data.description} eyebrow="Post" ogImage={ogImage}>
   <a href="/blog" class="mb-6 inline-flex items-center gap-1.5 text-sm text-on-surface-variant hover:text-on-surface">
     <ArrowLeft size={14} /> All posts
   </a>
