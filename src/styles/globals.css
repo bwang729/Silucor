@@ -305,6 +305,40 @@ pre {
   }
 }
 
+/* ─── Blog reader chrome (progress bar + TOC active state) ──
+ * Progress bar fills the --progress CSS var, driven by scroll JS.
+ * TOC `.is-active` receives the primary accent border + text.
+ * ──────────────────────────────────────────────────────────── */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 50;
+  pointer-events: none;
+  background: color-mix(in oklab, var(--color-primary) 10%, transparent);
+  overflow: hidden;
+}
+
+.reading-progress::before {
+  content: '';
+  display: block;
+  height: 100%;
+  width: var(--progress, 0%);
+  background: linear-gradient(
+    90deg,
+    var(--color-primary),
+    var(--color-tertiary)
+  );
+  transition: width 80ms linear;
+}
+
+.toc-link.is-active {
+  border-left-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
 /* ─── Hero WebGL canvas (silicon lattice) ────────────────────
  * Absolute layer behind hero content. Canvas z-index sits above
  * the spotlight ::before gradient (z: -1) but under FadeIn text (z: 10).

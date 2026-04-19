@@ -1,7 +1,7 @@
 ---
 import PageLayout from '~/layouts/PageLayout.astro';
 import { getCollection, render } from 'astro:content';
-import { ArrowLeft, Calendar, Tag as TagIcon } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Calendar, Tag as TagIcon } from 'lucide-react';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -9,12 +9,26 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 const date = post.data.publishedAt.toISOString().slice(0, 10);
 const ogImage = `/og/${post.id}.png`;
+
+const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+
+const siblings = (
+  await getCollection(
+    'blog',
+    ({ data }) => !data.draft && data.lang === post.data.lang,
+  )
+).sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+const idx = siblings.findIndex((p) => p.id === post.id);
+const newer = idx > 0 ? siblings[idx - 1] : null;
+const older = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
 ---
 
 <PageLayout title={post.data.title} description={post.data.description} eyebrow="Post" ogImage={ogImage}>
+  <div class="reading-progress" aria-hidden="true" data-reading-progress></div>
+
   <a href="/blog" class="mb-6 inline-flex items-center gap-1.5 text-sm text-on-surface-variant hover:text-on-surface">
     <ArrowLeft size={14} /> All posts
   </a>
@@ -48,7 +62,124 @@ const ogImage = `/og/${post.id}.png`;
     </div>
   </header>
 
-  <article class="prose prose-invert max-w-3xl prose-headings:font-headline prose-headings:tracking-tight prose-a:text-primary prose-code:text-tertiary prose-pre:bg-transparent prose-pre:p-0">
-    <Content />
-  </article>
+  <div class="relative lg:flex lg:gap-10">
+    <article class="prose prose-invert min-w-0 max-w-3xl flex-1 prose-headings:font-headline prose-headings:tracking-tight prose-a:text-primary prose-code:text-tertiary prose-pre:bg-transparent prose-pre:p-0">
+      <Content />
+    </article>
+
+    {toc.length > 0 && (
+      <aside class="hidden lg:block lg:w-56 lg:flex-shrink-0">
+        <nav class="sticky top-24" aria-label="On this page">
+          <p class="mb-3 font-mono text-xs uppercase tracking-[0.18em] text-outline">
+            On this page
+          </p>
+          <ul class="space-y-0.5 border-l border-outline-variant/60">
+            {toc.map((h) => (
+              <li>
+                <a
+                  href={`#${h.slug}`}
+                  data-toc-link
+                  class:list={[
+                    'toc-link block border-l-2 border-transparent py-1 pr-2 text-[13px] leading-snug text-on-surface-variant transition-colors hover:text-on-surface',
+                    h.depth === 2 ? 'pl-3' : 'pl-6',
+                  ]}
+                >
+                  {h.text}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </aside>
+    )}
+  </div>
+
+  {(older || newer) && (
+    <nav class="mt-20 grid gap-4 border-t border-outline-variant/40 pt-10 md:grid-cols-2" aria-label="Post navigation">
+      {older ? (
+        <a
+          href={`/blog/${older.id}`}
+          class="group flex items-start gap-3 rounded-2xl border border-outline-variant bg-surface-low/40 p-5 backdrop-blur-xl transition hover:border-[color:color-mix(in_oklab,var(--color-primary)_40%,transparent)] hover:bg-surface-high/40"
+        >
+          <ArrowLeft size={18} className="mt-0.5 shrink-0 text-on-surface-variant transition group-hover:-translate-x-0.5 group-hover:text-primary" />
+          <div class="min-w-0">
+            <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-outline">Older</p>
+            <p class="mt-1 truncate font-headline text-sm font-semibold text-on-surface group-hover:text-primary">
+              {older.data.title}
+            </p>
+          </div>
+        </a>
+      ) : <div class="hidden md:block" />}
+      {newer ? (
+        <a
+          href={`/blog/${newer.id}`}
+          class="group flex items-start justify-end gap-3 rounded-2xl border border-outline-variant bg-surface-low/40 p-5 text-right backdrop-blur-xl transition hover:border-[color:color-mix(in_oklab,var(--color-primary)_40%,transparent)] hover:bg-surface-high/40 md:col-start-2"
+        >
+          <div class="min-w-0">
+            <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-outline">Newer</p>
+            <p class="mt-1 truncate font-headline text-sm font-semibold text-on-surface group-hover:text-primary">
+              {newer.data.title}
+            </p>
+          </div>
+          <ArrowRight size={18} className="mt-0.5 shrink-0 text-on-surface-variant transition group-hover:translate-x-0.5 group-hover:text-primary" />
+        </a>
+      ) : <div class="hidden md:block" />}
+    </nav>
+  )}
 </PageLayout>
+
+<script>
+  function initBlogReader() {
+    const bar = document.querySelector<HTMLElement>('[data-reading-progress]');
+    if (bar) {
+      const root = document.documentElement;
+      const update = () => {
+        const max = root.scrollHeight - root.clientHeight;
+        const ratio = max > 0 ? root.scrollTop / max : 0;
+        bar.style.setProperty('--progress', `${Math.min(100, Math.max(0, ratio * 100))}%`);
+      };
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update, { passive: true });
+      update();
+    }
+
+    const links = Array.from(
+      document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]'),
+    );
+    if (links.length === 0) return;
+    const targets = links
+      .map((a) => {
+        const id = a.getAttribute('href')?.slice(1);
+        return id ? document.getElementById(id) : null;
+      })
+      .filter((el): el is HTMLElement => !!el);
+
+    if (targets.length === 0) return;
+
+    const setActive = (id: string) => {
+      for (const a of links) {
+        a.classList.toggle('is-active', a.getAttribute('href') === `#${id}`);
+      }
+    };
+
+    const visible = new Set<string>();
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) visible.add(e.target.id);
+          else visible.delete(e.target.id);
+        }
+        for (const t of targets) {
+          if (visible.has(t.id)) {
+            setActive(t.id);
+            break;
+          }
+        }
+      },
+      { rootMargin: '-20% 0% -70% 0%' },
+    );
+    for (const t of targets) io.observe(t);
+  }
+
+  document.addEventListener('astro:page-load', initBlogReader);
+</script>
