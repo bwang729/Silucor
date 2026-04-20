@@ -1,0 +1,60 @@
+---
+import PageLayout from '~/layouts/PageLayout.astro';
+import Card from '~/components/static/Card.astro';
+import FadeIn from '~/components/island/FadeIn.tsx';
+import { Cpu, Code2 } from 'lucide-react';
+
+const groups = [
+  {
+    icon: Cpu,
+    title: '硬件',
+    items: [
+      { k: '工作站', v: '待定' },
+      { k: '笔记本', v: '待定' },
+      { k: '键盘', v: '待定' },
+      { k: '显示器', v: '待定' },
+    ],
+  },
+  {
+    icon: Code2,
+    title: '软件',
+    items: [
+      { k: '编辑器', v: '待定' },
+      { k: 'Shell', v: '待定' },
+      { k: '终端', v: '待定' },
+      { k: '窗口管理器', v: '待定' },
+    ],
+  },
+];
+---
+
+<PageLayout
+  title="装备"
+  description="设备、编辑器、日常工作流。"
+  eyebrow="装备"
+  heading="我用什么"
+  subtitle="日常用的工具清单。正式配置会在上线时公布。"
+>
+  <div class="grid gap-5 md:grid-cols-2">
+    {groups.map((g, i) => (
+      <FadeIn client:visible delay={i * 80}>
+        <Card>
+          <div class="mb-4 flex items-center gap-3">
+            <span class="grid size-9 place-items-center rounded-lg bg-[color:color-mix(in_oklab,var(--color-primary)_15%,transparent)] text-primary">
+              <g.icon size={18} />
+            </span>
+            <h2 class="font-headline text-lg font-semibold">{g.title}</h2>
+          </div>
+          <dl class="divide-y divide-[color:var(--color-outline-variant)]">
+            {g.items.map((it) => (
+              <div class="flex items-center justify-between gap-4 py-2.5 text-sm">
+                <dt class="text-on-surface-variant">{it.k}</dt>
+                <dd class="font-mono text-on-surface">{it.v}</dd>
+              </div>
+            ))}
+          </dl>
+        </Card>
+      </FadeIn>
+    ))}
+  </div>
+</PageLayout>

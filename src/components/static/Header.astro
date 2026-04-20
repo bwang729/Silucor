@@ -5,6 +5,7 @@ import { profile } from '~/data/profile';
 import { m } from '~/paraglide/messages.js';
 import { resolveLocale, localizePath } from '~/i18n/locale';
 import LangSwitcher from '~/components/static/LangSwitcher.astro';
+import AiAskPanel from '~/components/island/AiAskPanel.tsx';
 
 const here = Astro.url.pathname;
 const locale = resolveLocale(here);
@@ -54,6 +55,7 @@ const brand = locale === 'zh' ? '烁芯 Silucor' : profile.brand.en;
 
     <div class="hidden items-center gap-2 sm:flex">
       <LangSwitcher />
+      <AiAskPanel client:only="react" locale={locale} />
       <button
         type="button"
         data-cmdk-trigger

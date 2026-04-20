@@ -9,6 +9,7 @@ import {
   Mail,
   Radio,
   Search,
+  Sparkles,
   User,
   Wrench,
 } from 'lucide-react';
@@ -76,6 +77,19 @@ export default function CommandPalette() {
   }
 
   const groups: CmdGroup[] = [
+    {
+      heading: 'Actions',
+      items: [
+        {
+          id: 'ai-ask',
+          label: 'Ask anything (AI)',
+          hint: 'demo corpus',
+          icon: <Sparkles size={16} />,
+          action: () => window.dispatchEvent(new CustomEvent('silucor:open-ask')),
+          keywords: 'ai chat question help',
+        },
+      ],
+    },
     {
       heading: 'Navigation',
       items: [

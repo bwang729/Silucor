@@ -1,0 +1,47 @@
+---
+import PageLayout from '~/layouts/PageLayout.astro';
+import Card from '~/components/static/Card.astro';
+import FadeIn from '~/components/island/FadeIn.tsx';
+import { Briefcase, BookOpen, BookMarked, Rocket } from 'lucide-react';
+
+const updated = '2026-04-19';
+
+const items = [
+  { icon: Briefcase, label: '在做', value: '待定' },
+  { icon: BookOpen, label: '在学', value: '待定' },
+  { icon: BookMarked, label: '在读', value: '待定' },
+  { icon: Rocket, label: '在交付', value: '待定' },
+];
+---
+
+<PageLayout
+  title="近况"
+  description="当前重心。"
+  eyebrow="近况"
+  heading="我现在在做什么"
+  subtitle={`当前焦点的快照，更新于 ${updated}。`}
+>
+  <FadeIn client:load>
+    <Card variant="bright">
+      <ul class="divide-y divide-[color:var(--color-outline-variant)]">
+        {items.map((it) => (
+          <li class="flex items-center gap-4 py-4 first:pt-0 last:pb-0">
+            <span class="grid size-9 shrink-0 place-items-center rounded-lg bg-[color:color-mix(in_oklab,var(--color-tertiary)_15%,transparent)] text-tertiary">
+              <it.icon size={18} />
+            </span>
+            <div class="min-w-0 flex-1">
+              <p class="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
+                {it.label}
+              </p>
+              <p class="mt-0.5 font-mono text-sm text-on-surface">{it.value}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </Card>
+  </FadeIn>
+
+  <p class="mt-8 text-xs text-outline">
+    灵感来自 <a href="https://nownownow.com/about" class="text-primary hover:underline">/now</a> 社区。
+  </p>
+</PageLayout>
