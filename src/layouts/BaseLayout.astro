@@ -4,6 +4,8 @@ import { ClientRouter } from 'astro:transitions';
 import CommandPalette from '~/components/island/CommandPalette.tsx';
 import MagneticCursor from '~/components/island/MagneticCursor.tsx';
 import { profile } from '~/data/profile';
+import { resolveLocale } from '~/i18n/locale';
+import { setLocale } from '~/paraglide/runtime.js';
 
 interface Props {
   title?: string;
@@ -13,17 +15,21 @@ interface Props {
 }
 
 const { title, description, ogImage } = Astro.props;
+const locale = resolveLocale(Astro.url.pathname);
+setLocale(locale, { reload: false });
 
-const fullTitle = title
-  ? `${title} · ${profile.brand.en}`
-  : `${profile.brand.en} · ${profile.brand.tagline.en}`;
-const desc = description ?? profile.identity.bio.en;
+const brand = locale === 'zh' ? '烁芯 Silucor' : profile.brand.en;
+const tagline = locale === 'zh' ? profile.brand.tagline.zh : profile.brand.tagline.en;
+const bio = locale === 'zh' ? profile.identity.bio.zh : profile.identity.bio.en;
+
+const fullTitle = title ? `${title} · ${brand}` : `${brand} · ${tagline}`;
+const desc = description ?? bio;
 const og = ogImage ?? '/og-default.svg';
 const canonical = new URL(Astro.url.pathname, Astro.site ?? profile.meta.origin).toString();
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale === 'zh' ? 'zh-Hans' : 'en'}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

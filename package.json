@@ -25,6 +25,7 @@
     "@fontsource/inter": "^5.2.8",
     "@fontsource/noto-sans-sc": "^5.2.9",
     "@fontsource/space-grotesk": "^5.2.10",
+    "@inlang/paraglide-js": "^2.16.0",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@react-three/fiber": "^9.6.0",
     "@resvg/resvg-js": "^2.6.2",

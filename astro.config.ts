@@ -4,11 +4,17 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import expressiveCode from 'astro-expressive-code';
+import { paraglideVitePlugin } from '@inlang/paraglide-js';
 
 export default defineConfig({
   site: 'https://web.cbkeydemo.top',
   trailingSlash: 'never',
   prefetch: { prefetchAll: true, defaultStrategy: 'viewport' },
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'zh'],
+    routing: { prefixDefaultLocale: false, redirectToDefaultLocale: false },
+  },
   integrations: [
     expressiveCode({
       themes: ['github-dark-default'],
@@ -38,7 +44,14 @@ export default defineConfig({
     sitemap(),
   ],
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [
+      tailwindcss(),
+      paraglideVitePlugin({
+        project: './project.inlang',
+        outdir: './src/paraglide',
+        strategy: ['globalVariable', 'baseLocale'],
+      }),
+    ],
   },
   experimental: {
     clientPrerender: true,

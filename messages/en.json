@@ -1,0 +1,52 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "nav_home": "Home",
+  "nav_about": "About",
+  "nav_projects": "Projects",
+  "nav_blog": "Blog",
+  "nav_now": "Now",
+  "nav_uses": "Uses",
+  "nav_contact": "Contact",
+
+  "cta_command_palette": "Command palette",
+  "cta_view_all_projects": "View all projects",
+  "cta_read_more": "Read more",
+  "cta_back_all_projects": "All projects",
+  "cta_back_all_posts": "All posts",
+  "cta_resume_pdf": "Resume (PDF)",
+  "cta_ask_anything": "Ask anything",
+
+  "hero_eyebrow": "Systems · Semiconductor · Rust/C",
+  "hero_subtitle": "I design signing protocols that live on a smart card, a phone, and a cloud worker — and I like it when all three stay honest.",
+  "hero_cta_primary": "Browse projects",
+  "hero_cta_secondary": "Read the notebook",
+
+  "section_featured_projects": "Featured projects",
+  "section_recent_posts": "Recent writing",
+  "section_about": "About",
+  "section_architecture": "Architecture",
+
+  "footer_tagline": "Systems & semiconductor engineer.",
+  "footer_copyright": "© Silucor",
+  "footer_built_with": "Built with Astro, React, Tailwind.",
+
+  "meta_reading_time": "{minutes} min read",
+  "meta_updated": "Updated {date}",
+  "meta_draft_badge": "Draft",
+  "meta_newer_post": "Newer",
+  "meta_older_post": "Older",
+  "meta_on_this_page": "On this page",
+
+  "lang_switch_label": "Language",
+  "lang_en": "English",
+  "lang_zh": "中文",
+
+  "a11y_skip_to_content": "Skip to content",
+  "a11y_open_menu": "Open menu",
+  "a11y_close_menu": "Close menu",
+  "a11y_toggle_theme": "Toggle theme",
+
+  "notfound_title": "Page not found",
+  "notfound_body": "The page you're looking for doesn't exist. Try the command palette.",
+  "notfound_back_home": "Back home"
+}

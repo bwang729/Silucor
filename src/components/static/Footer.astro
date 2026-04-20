@@ -1,8 +1,12 @@
 ---
 import { profile } from '~/data/profile';
 import { Github, Linkedin, Mail, Rss } from 'lucide-react';
+import { m } from '~/paraglide/messages.js';
+import { resolveLocale } from '~/i18n/locale';
 
 const year = new Date().getFullYear();
+const locale = resolveLocale(Astro.url.pathname);
+const author = locale === 'zh' ? '烁芯 Silucor' : profile.meta.author;
 ---
 
 <footer
@@ -19,7 +23,7 @@ const year = new Date().getFullYear();
         S
       </span>
       <p class="text-sm text-on-surface-variant">
-        © {year} {profile.meta.author}. Crafted with care.
+        © {year} {author} · {m.footer_tagline({}, { locale })}
       </p>
     </div>
 

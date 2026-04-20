@@ -1,0 +1,99 @@
+---
+import PageLayout from '~/layouts/PageLayout.astro';
+import Card from '~/components/static/Card.astro';
+import Chip from '~/components/static/Chip.astro';
+import FadeIn from '~/components/island/FadeIn.tsx';
+import { profile } from '~/data/profile';
+import { Cpu, Shield, Code2, Layers } from 'lucide-react';
+
+const skillGroups = [
+  {
+    icon: Cpu,
+    title: '系统与嵌入式',
+    items: ['Linux 内核', '驱动开发', 'RTOS', 'RISC-V', 'ARM Cortex-M'],
+  },
+  {
+    icon: Code2,
+    title: '编程语言',
+    items: ['C / C++', 'Rust', 'TypeScript', 'Python'],
+  },
+  {
+    icon: Shield,
+    title: '安全与密码学',
+    items: ['MPC 协议', '门限签名', '安全存储'],
+  },
+  {
+    icon: Layers,
+    title: '工具链',
+    items: ['CMake', 'Cargo / UniFFI', 'Gradle / KMP', 'GDB / OpenOCD'],
+  },
+];
+---
+
+<PageLayout
+  title="关于"
+  description={profile.identity.bio.zh}
+  eyebrow="关于"
+  heading="贴着硬件写代码"
+  subtitle={profile.identity.bio.zh}
+>
+  <FadeIn client:load className="mb-12">
+    <Card variant="bright">
+      <dl class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <dt class="text-xs font-medium uppercase tracking-wider text-on-surface-variant">角色</dt>
+          <dd class="mt-1 font-headline text-base font-semibold text-on-surface">
+            {profile.identity.role.zh}
+          </dd>
+        </div>
+        <div>
+          <dt class="text-xs font-medium uppercase tracking-wider text-on-surface-variant">品牌</dt>
+          <dd class="mt-1 font-headline text-base font-semibold text-on-surface">
+            {profile.brand.zh} <span class="text-on-surface-variant">/ {profile.brand.en}</span>
+          </dd>
+        </div>
+        <div>
+          <dt class="text-xs font-medium uppercase tracking-wider text-on-surface-variant">方向</dt>
+          <dd class="mt-1 font-headline text-base font-semibold text-on-surface">
+            {profile.brand.tagline.zh}
+          </dd>
+        </div>
+        <div>
+          <dt class="text-xs font-medium uppercase tracking-wider text-on-surface-variant">联系</dt>
+          <dd class="mt-1 font-mono text-sm text-on-surface">
+            {profile.contact.emailDisplay}
+          </dd>
+        </div>
+      </dl>
+    </Card>
+  </FadeIn>
+
+  <section class="mb-16">
+    <FadeIn client:visible className="mb-8">
+      <h2 class="font-headline text-3xl font-bold tracking-tighter">技术栈</h2>
+      <p class="mt-2 text-on-surface-variant">
+        这些是我真正写过生产代码的领域。
+      </p>
+    </FadeIn>
+
+    <div class="grid gap-5 md:grid-cols-2">
+      {skillGroups.map((g, i) => (
+        <FadeIn client:visible delay={i * 80}>
+          <Card>
+            <div class="mb-4 flex items-center gap-3">
+              <span class="grid size-9 place-items-center rounded-lg bg-[color:color-mix(in_oklab,var(--color-primary)_15%,transparent)] text-primary">
+                <g.icon size={18} />
+              </span>
+              <h3 class="font-headline text-lg font-semibold text-on-surface">{g.title}</h3>
+            </div>
+            <div class="flex flex-wrap gap-1.5">
+              {g.items.map((s) => (
+                <Chip>{s}</Chip>
+              ))}
+            </div>
+          </Card>
+        </FadeIn>
+      ))}
+    </div>
+  </section>
+</PageLayout>

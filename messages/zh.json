@@ -1,0 +1,52 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "nav_home": "首页",
+  "nav_about": "关于",
+  "nav_projects": "项目",
+  "nav_blog": "博客",
+  "nav_now": "近况",
+  "nav_uses": "装备",
+  "nav_contact": "联系",
+
+  "cta_command_palette": "命令面板",
+  "cta_view_all_projects": "查看全部项目",
+  "cta_read_more": "阅读全文",
+  "cta_back_all_projects": "返回项目列表",
+  "cta_back_all_posts": "返回文章列表",
+  "cta_resume_pdf": "简历 PDF",
+  "cta_ask_anything": "AI 问答",
+
+  "hero_eyebrow": "系统 · 半导体 · Rust/C",
+  "hero_subtitle": "我设计分布在智能卡、手机与云端三方之间的签名协议——任何一方都不能独自拿到全部密钥。",
+  "hero_cta_primary": "浏览项目",
+  "hero_cta_secondary": "阅读笔记",
+
+  "section_featured_projects": "精选项目",
+  "section_recent_posts": "最新写作",
+  "section_about": "关于",
+  "section_architecture": "架构",
+
+  "footer_tagline": "系统与半导体工程师。",
+  "footer_copyright": "© 烁芯 Silucor",
+  "footer_built_with": "基于 Astro · React · Tailwind 构建。",
+
+  "meta_reading_time": "{minutes} 分钟阅读",
+  "meta_updated": "更新于 {date}",
+  "meta_draft_badge": "草稿",
+  "meta_newer_post": "较新",
+  "meta_older_post": "较早",
+  "meta_on_this_page": "本页目录",
+
+  "lang_switch_label": "语言",
+  "lang_en": "English",
+  "lang_zh": "中文",
+
+  "a11y_skip_to_content": "跳到正文",
+  "a11y_open_menu": "打开菜单",
+  "a11y_close_menu": "关闭菜单",
+  "a11y_toggle_theme": "切换主题",
+
+  "notfound_title": "页面不存在",
+  "notfound_body": "你要找的页面还没有写出来。试试命令面板。",
+  "notfound_back_home": "返回首页"
+}

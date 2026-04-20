@@ -2,18 +2,27 @@
  * Static site-level constants. Anything not personal goes here.
  */
 
-export const NAV_LINKS = [
-  { href: '/', label: 'Home' },
-  { href: '/about', label: 'About' },
-  { href: '/projects', label: 'Projects' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/uses', label: 'Uses' },
-  { href: '/now', label: 'Now' },
-] as const;
+import { m } from '~/paraglide/messages.js';
+import type { Locale } from '~/i18n/locale';
+import { localizePath } from '~/i18n/locale';
 
-export type NavLink = (typeof NAV_LINKS)[number];
+export type NavLink = { href: string; label: string };
+
+export function getNavLinks(locale: Locale): readonly NavLink[] {
+  return [
+    { href: localizePath('/', locale), label: m.nav_home({}, { locale }) },
+    { href: localizePath('/about', locale), label: m.nav_about({}, { locale }) },
+    { href: localizePath('/projects', locale), label: m.nav_projects({}, { locale }) },
+    { href: localizePath('/blog', locale), label: m.nav_blog({}, { locale }) },
+    { href: localizePath('/uses', locale), label: m.nav_uses({}, { locale }) },
+    { href: localizePath('/now', locale), label: m.nav_now({}, { locale }) },
+  ];
+}
 
 export function isCurrentPath(pathname: string, href: string): boolean {
-  if (href === '/') return pathname === '/' || pathname === '';
-  return pathname === href || pathname.startsWith(`${href}/`);
+  const norm = (s: string) => s.replace(/\/+$/, '') || '/';
+  const p = norm(pathname);
+  const h = norm(href);
+  if (h === '/') return p === '/';
+  return p === h || p.startsWith(`${h}/`);
 }

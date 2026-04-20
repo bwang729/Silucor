@@ -1,9 +1,15 @@
 ---
 import { Search } from 'lucide-react';
-import { NAV_LINKS, isCurrentPath } from '~/lib/site';
+import { getNavLinks, isCurrentPath } from '~/lib/site';
 import { profile } from '~/data/profile';
+import { m } from '~/paraglide/messages.js';
+import { resolveLocale, localizePath } from '~/i18n/locale';
+import LangSwitcher from '~/components/static/LangSwitcher.astro';
 
 const here = Astro.url.pathname;
+const locale = resolveLocale(here);
+const navLinks = getNavLinks(locale);
+const brand = locale === 'zh' ? '烁芯 Silucor' : profile.brand.en;
 ---
 
 <header
@@ -12,7 +18,7 @@ const here = Astro.url.pathname;
   class="sticky top-0 z-40 border-b border-outline-variant/40 bg-[color:var(--color-background)]/60 backdrop-blur-xl"
 >
   <div class="container-page flex h-16 items-center justify-between gap-6">
-    <a href="/" class="group flex items-center gap-2.5">
+    <a href={localizePath('/', locale)} class="group flex items-center gap-2.5">
       <span
         class="grid size-9 place-items-center rounded-lg bg-gradient-to-br from-[color:var(--color-primary)] to-[color:var(--color-primary-container)] font-headline text-base font-bold text-[color:var(--color-on-primary)] shadow-lg shadow-[color:color-mix(in_oklab,var(--color-primary)_25%,transparent)] transition-transform group-hover:scale-105"
         aria-hidden="true"
@@ -20,13 +26,13 @@ const here = Astro.url.pathname;
         S
       </span>
       <span class="font-headline text-base font-bold tracking-tight text-on-surface">
-        {profile.brand.en}
+        {brand}
       </span>
     </a>
 
     <nav aria-label="Primary" class="hidden items-center gap-1 md:flex">
       {
-        NAV_LINKS.map((l) => {
+        navLinks.map((l) => {
           const active = isCurrentPath(here, l.href);
           return (
             <a
@@ -47,23 +53,24 @@ const here = Astro.url.pathname;
     </nav>
 
     <div class="hidden items-center gap-2 sm:flex">
+      <LangSwitcher />
       <button
         type="button"
         data-cmdk-trigger
-        aria-label="Open command palette"
+        aria-label={m.cta_command_palette({}, { locale })}
         class="inline-flex items-center gap-2 rounded-full border border-outline-variant px-3 py-1.5 text-xs text-on-surface-variant transition hover:border-[color:color-mix(in_oklab,var(--color-primary)_40%,transparent)] hover:text-on-surface"
       >
         <Search size={12} />
-        <span class="hidden md:inline">Search</span>
+        <span class="hidden md:inline">{m.cta_command_palette({}, { locale })}</span>
         <kbd class="rounded border border-outline-variant bg-surface px-1 py-0.5 font-mono text-[10px] leading-none">
           ⌘K
         </kbd>
       </button>
       <a
-        href="/about"
+        href={localizePath('/about', locale)}
         class="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-[color:var(--color-primary)] to-[color:var(--color-primary-container)] px-4 py-1.5 text-sm font-semibold text-[color:var(--color-on-primary)] shadow-md transition hover:brightness-110"
       >
-        Get in touch
+        {m.nav_contact({}, { locale })}
       </a>
     </div>
   </div>
@@ -73,7 +80,7 @@ const here = Astro.url.pathname;
     class="container-page flex flex-wrap gap-x-3 gap-y-1 border-t border-outline-variant/40 py-2 text-sm md:hidden"
   >
     {
-      NAV_LINKS.map((l) => {
+      navLinks.map((l) => {
         const active = isCurrentPath(here, l.href);
         return (
           <a
