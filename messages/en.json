@@ -48,5 +48,9 @@
 
   "notfound_title": "Page not found",
   "notfound_body": "The page you're looking for doesn't exist. Try the command palette.",
-  "notfound_back_home": "Back home"
+  "notfound_back_home": "Back home",
+
+  "comments_section": "Comments",
+  "comments_placeholder_title": "Comments activate at launch.",
+  "comments_placeholder_body": "Comments are powered by GitHub Discussions via giscus. The wiring is in place; the production repo will be published when the site goes live."
 }

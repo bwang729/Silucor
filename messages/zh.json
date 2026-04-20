@@ -48,5 +48,9 @@
 
   "notfound_title": "页面不存在",
   "notfound_body": "你要找的页面还没有写出来。试试命令面板。",
-  "notfound_back_home": "返回首页"
+  "notfound_back_home": "返回首页",
+
+  "comments_section": "评论",
+  "comments_placeholder_title": "评论功能将在网站上线时开启。",
+  "comments_placeholder_body": "评论基于 GitHub Discussions，通过 giscus 接入。代码已就位，正式仓库会在上线时公布。"
 }

@@ -3,12 +3,13 @@ import PageLayout from '~/layouts/PageLayout.astro';
 import { getCollection, render } from 'astro:content';
 import { ArrowLeft, ArrowRight, Calendar, Tag as TagIcon } from 'lucide-react';
 import GiscusComments from '~/components/static/GiscusComments.astro';
-import { resolveLocale } from '~/i18n/locale';
+import { resolveLocale, localizePath } from '~/i18n/locale';
+import { m } from '~/paraglide/messages.js';
 
 const locale = resolveLocale(Astro.url.pathname);
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = await getCollection('blog', ({ data }) => data.lang === 'zh');
   return posts.map((p) => ({ params: { slug: p.id }, props: { post: p } }));
 }
 
@@ -30,11 +31,11 @@ const newer = idx > 0 ? siblings[idx - 1] : null;
 const older = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
 ---
 
-<PageLayout title={post.data.title} description={post.data.description} eyebrow="Post" ogImage={ogImage}>
+<PageLayout title={post.data.title} description={post.data.description} eyebrow="文章" ogImage={ogImage}>
   <div class="reading-progress" aria-hidden="true" data-reading-progress></div>
 
-  <a href="/blog" class="mb-6 inline-flex items-center gap-1.5 text-sm text-on-surface-variant hover:text-on-surface">
-    <ArrowLeft size={14} /> All posts
+  <a href={localizePath('/blog', locale)} class="mb-6 inline-flex items-center gap-1.5 text-sm text-on-surface-variant hover:text-on-surface">
+    <ArrowLeft size={14} /> {m.cta_back_all_posts({}, { locale })}
   </a>
 
   <header class="mb-12 max-w-3xl">
@@ -73,9 +74,9 @@ const older = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
 
     {toc.length > 0 && (
       <aside class="hidden lg:block lg:w-56 lg:flex-shrink-0">
-        <nav class="sticky top-24" aria-label="On this page">
+        <nav class="sticky top-24" aria-label={m.meta_on_this_page({}, { locale })}>
           <p class="mb-3 font-mono text-xs uppercase tracking-[0.18em] text-outline">
-            On this page
+            {m.meta_on_this_page({}, { locale })}
           </p>
           <ul class="space-y-0.5 border-l border-outline-variant/60">
             {toc.map((h) => (
@@ -102,12 +103,12 @@ const older = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
     <nav class="mt-20 grid gap-4 border-t border-outline-variant/40 pt-10 md:grid-cols-2" aria-label="Post navigation">
       {older ? (
         <a
-          href={`/blog/${older.id}`}
+          href={localizePath(`/blog/${older.id}`, locale)}
           class="group flex items-start gap-3 rounded-2xl border border-outline-variant bg-surface-low/40 p-5 backdrop-blur-xl transition hover:border-[color:color-mix(in_oklab,var(--color-primary)_40%,transparent)] hover:bg-surface-high/40"
         >
           <ArrowLeft size={18} className="mt-0.5 shrink-0 text-on-surface-variant transition group-hover:-translate-x-0.5 group-hover:text-primary" />
           <div class="min-w-0">
-            <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-outline">Older</p>
+            <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-outline">{m.meta_older_post({}, { locale })}</p>
             <p class="mt-1 truncate font-headline text-sm font-semibold text-on-surface group-hover:text-primary">
               {older.data.title}
             </p>
@@ -116,11 +117,11 @@ const older = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
       ) : <div class="hidden md:block" />}
       {newer ? (
         <a
-          href={`/blog/${newer.id}`}
+          href={localizePath(`/blog/${newer.id}`, locale)}
           class="group flex items-start justify-end gap-3 rounded-2xl border border-outline-variant bg-surface-low/40 p-5 text-right backdrop-blur-xl transition hover:border-[color:color-mix(in_oklab,var(--color-primary)_40%,transparent)] hover:bg-surface-high/40 md:col-start-2"
         >
           <div class="min-w-0">
-            <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-outline">Newer</p>
+            <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-outline">{m.meta_newer_post({}, { locale })}</p>
             <p class="mt-1 truncate font-headline text-sm font-semibold text-on-surface group-hover:text-primary">
               {newer.data.title}
             </p>

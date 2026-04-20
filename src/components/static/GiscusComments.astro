@@ -1,0 +1,92 @@
+---
+import { MessageSquare, Github } from 'lucide-react';
+import { comments } from '~/data/comments';
+import type { Locale } from '~/i18n/locale';
+import { m } from '~/paraglide/messages.js';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const giscusLang = locale === 'zh' ? 'zh-CN' : 'en';
+---
+
+<section class="mt-16 border-t border-outline-variant/40 pt-10" aria-label={m.comments_section({}, { locale })}>
+  <div class="mb-6 flex items-center gap-3">
+    <span class="grid size-9 place-items-center rounded-lg bg-[color:color-mix(in_oklab,var(--color-tertiary)_15%,transparent)] text-tertiary">
+      <MessageSquare size={18} />
+    </span>
+    <h2 class="font-headline text-lg font-semibold text-on-surface">
+      {m.comments_section({}, { locale })}
+    </h2>
+  </div>
+
+  {comments.enabled ? (
+    <div
+      data-giscus
+      data-repo={comments.repo}
+      data-repo-id={comments.repoId}
+      data-category={comments.category}
+      data-category-id={comments.categoryId}
+      data-mapping={comments.mapping}
+      data-reactions-enabled={comments.reactionsEnabled}
+      data-emit-metadata={comments.emitMetadata}
+      data-input-position={comments.inputPosition}
+      data-theme={comments.theme}
+      data-lang={giscusLang}
+      data-loading={comments.loading}
+    ></div>
+  ) : (
+    <div class="rounded-2xl border border-outline-variant bg-surface-low/40 p-6 backdrop-blur-xl">
+      <p class="flex items-center gap-2 text-sm text-on-surface">
+        <Github size={16} className="shrink-0 text-tertiary" />
+        <span>{m.comments_placeholder_title({}, { locale })}</span>
+      </p>
+      <p class="mt-2 text-xs leading-relaxed text-on-surface-variant">
+        {m.comments_placeholder_body({}, { locale })}
+      </p>
+    </div>
+  )}
+</section>
+
+{comments.enabled && (
+  <script
+    define:vars={{
+      repo: comments.repo,
+      repoId: comments.repoId,
+      category: comments.category,
+      categoryId: comments.categoryId,
+      mapping: comments.mapping,
+      reactionsEnabled: comments.reactionsEnabled,
+      emitMetadata: comments.emitMetadata,
+      inputPosition: comments.inputPosition,
+      theme: comments.theme,
+      lang: giscusLang,
+      loading: comments.loading,
+    }}
+  >
+    function mountGiscus() {
+      const host = document.querySelector('[data-giscus]');
+      if (!host || host.querySelector('iframe, script')) return;
+      const s = document.createElement('script');
+      s.src = 'https://giscus.app/client.js';
+      s.crossOrigin = 'anonymous';
+      s.async = true;
+      s.setAttribute('data-repo', repo);
+      s.setAttribute('data-repo-id', repoId);
+      s.setAttribute('data-category', category);
+      s.setAttribute('data-category-id', categoryId);
+      s.setAttribute('data-mapping', mapping);
+      s.setAttribute('data-reactions-enabled', reactionsEnabled);
+      s.setAttribute('data-emit-metadata', emitMetadata);
+      s.setAttribute('data-input-position', inputPosition);
+      s.setAttribute('data-theme', theme);
+      s.setAttribute('data-lang', lang);
+      s.setAttribute('data-loading', loading);
+      host.appendChild(s);
+    }
+    document.addEventListener('astro:page-load', mountGiscus);
+    mountGiscus();
+  </script>
+)}
